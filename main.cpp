@@ -12,15 +12,13 @@ int main() {
   board_manager_t board_manager;
   display_manager_t display_manager;
   module_manager_t module_manager;
-  //pico_dm::board_setup();
-
-  //debug
- //  display_manager.debug();
 
   pressed_button button = pressed_button::NONE;
+
   //loop forever
   while(true) {
     board_manager.tick(button);
+    
     module_manager.handle_button(button);
 
     if (board_manager.is_unclean()) {

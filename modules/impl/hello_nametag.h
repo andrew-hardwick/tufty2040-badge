@@ -17,11 +17,10 @@ namespace badge {
 
             int print_screen(screen_printer_t &printer);
             void move_selection(int8_t &direction);
-            void select(badge_module_t &result);
-            void clear(badge_module_t &result);
+            void activate_one();
+            void activate_two();
         
         private:
-            bool _initialized = false;
             int8_t _color_index = 0;
             //vector strings for colors
             std::vector<std::string> _backgrounds;

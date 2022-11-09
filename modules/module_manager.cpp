@@ -2,12 +2,12 @@
 
 #include "../utility/board_manager.h"
 #include "badge_module.h"
-#include "impl/hello_nametag.h"
+#include "impl/module_select.h"
 
 namespace badge {
     module_manager_t::module_manager_t() {
         //instantiate modules
-        _root_module = new hello_nametag_t();
+        _root_module = new module_select_t();
         _current_module = _root_module;
     }
 
@@ -25,16 +25,30 @@ namespace badge {
             case pressed_button::DOWN:
                 _current_module->move_selection(_dir_down);
                 break;
+            case pressed_button::B:
+                _current_module->activate_one();
+                break;
+            case pressed_button::A:
+                if (_current_module->parent) {
+                    _current_module = _current_module->parent;
+                    _current_module->set_unclean();
+                }
+                break;
+            case pressed_button::C:
+                if (_current_module->selected_child) {
+                    _current_module = _current_module->selected_child;
+                    _current_module->set_unclean();
+                } else {
+                    _current_module->activate_two();
+                }
+                break;
         }
     }
     
-    // badge_module_t* module_manager_t::getCurrentModule() const{
-    //     return _current_module;
-    // }
     int module_manager_t::print_screen(screen_printer_t &printer) {
-     //   if (_current_module->is_unclean()) {
+        if (_current_module->is_unclean()) {
             return _current_module->print_screen(printer);
-       // }
+        }
 
         return 0;
     }

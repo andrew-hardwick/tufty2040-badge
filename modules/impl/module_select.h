@@ -1,6 +1,9 @@
 #ifndef MODULE_SELECT_H
 #define MODULE_SELECT_H
 
+#include <vector>
+#include <string>
+
 #include "../badge_module.h"
 
 namespace badge {
@@ -9,10 +12,17 @@ namespace badge {
             module_select_t();
             ~module_select_t();
         
-            int print_screen(screen_printer_t &printer) = 0;
-            void move_selection(int8_t &direction) = 0;
-            void select(badge_module_t &result) = 0;
-    }
+            int print_screen(screen_printer_t &printer);
+            void move_selection(int8_t &direction);
+            void activate_one();
+            void activate_two();
+        
+        private:
+            std::vector<badge_module_t*> _children;
+            std::vector<std::string> _children_names;
+
+            int8_t _selected_index = 0;
+    };
 }
 
 #endif

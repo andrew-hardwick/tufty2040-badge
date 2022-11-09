@@ -89,11 +89,11 @@ namespace badge {
         _clean_state = false;
     }
 
-    void hello_nametag_t::select(badge_module_t &result) {
+    void hello_nametag_t::activate_one() {
 
     }
 
-    void hello_nametag_t::clear(badge_module_t &result) {
-        
+    void hello_nametag_t::activate_two() {
+
     }
 }

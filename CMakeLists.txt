@@ -22,6 +22,8 @@ add_executable(${NAME}
     modules/module_manager.cpp
     modules/badge_module.cpp
     modules/impl/hello_nametag.cpp
+    modules/impl/module_select.cpp
+    modules/impl/random_monster.cpp
     utility/board_manager.cpp
     utility/rand_utils.cpp
 )

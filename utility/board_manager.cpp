@@ -59,7 +59,12 @@ namespace badge {
         if (button_a.read()) {
             button = pressed_button::A;
         }
- //       button = pressed_button::;
+        if (button_b.read()) {
+            button = pressed_button::B;
+        }
+        if (button_c.read()) {
+            button = pressed_button::C;
+        }
     }
 
     uint16_t board_manager_t::get_lux() {
