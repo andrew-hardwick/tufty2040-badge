@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 # Change your executable name to something creative!
-set(NAME pico-boilerplate) # <-- Name your project/executable here!
+set(NAME ips_badge) # <-- Name your project/executable here!
 
 include(pimoroni_pico_import.cmake)
 include(pico_sdk_import.cmake)
@@ -16,19 +16,36 @@ pico_sdk_init()
 
 # Add your source files
 add_executable(${NAME}
-    main.cpp # <-- Add source files here!
+    main.cpp
+    display/display_manager.cpp
+    display/screen_printer.cpp
+    modules/module_manager.cpp
+    modules/impl/module_select.cpp
+    utility/board_manager.cpp
+    utility/rand_utils.cpp
 )
 
 # Include required libraries
 # This assumes `pimoroni-pico` is stored alongside your project
-include(common/pimoroni_i2c)
-include(libraries/pico_explorer/pico_explorer)
-# include(libraries/pico_display/pico_display)
+include(libraries/bitmap_fonts/bitmap_fonts)
+include(libraries/hershey_fonts/hershey_fonts)
+include(libraries/tufty2040/tufty2040)
+include(libraries/pico_graphics/pico_graphics)
+include(common/pimoroni_bus)
+include(drivers/st7789/st7789)
+include(drivers/rgbled/rgbled)
+include(drivers/button/button)
 
 # Don't forget to link the libraries you need!
 target_link_libraries(${NAME}
-    pimoroni_i2c
-    pico_explorer # <-- List libraries here!
+    hardware_adc
+    pico_stdlib
+    hardware_spi
+    rgbled
+    tufty2040
+    pico_graphics
+    st7789
+    button
 )
 
 # create map/bin/hex file etc.

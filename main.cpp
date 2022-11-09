@@ -1,18 +1,38 @@
-#include "pico_explorer.hpp"
+//#include "modules/build_module_tree.hpp"
+#include "modules/module_manager.h"
+#include "display/display_manager.h"
+#include "utility/board_manager.h"
+#include "utility/rand_utils.h"
+// #include "display/screen_manager.h"
 
-using namespace pimoroni;
-
-uint16_t buffer[PicoExplorer::WIDTH * PicoExplorer::HEIGHT];
-PicoExplorer pico_explorer(buffer);
+using namespace badge;
 
 int main() {
-    pico_explorer.init();
+  seed_random();
+  board_manager_t board_manager;
+  module_manager_t module_manager;
+  display_manager_t display_manager;
+  //pico_dm::board_setup();
 
-    pico_explorer.set_pen(255, 0, 0);
+  //debug
+   display_manager.debug();
 
-    while(true) {
-        pico_explorer.pixel(Point(0, 0));
-        // now we've done our drawing let's update the screen
-        pico_explorer.update();
+  //loop forever
+  while(true) {
+    module_manager.handle_button(board_manager.tick());
+    //board_manager.tick();
+
+    if (board_manager.is_unclean()) {
+      display_manager.update(board_manager);
     }
+
+    if (module_manager.is_unclean()) {
+      display_manager.update(module_manager);
+    }
+
+
+    sleep_ms(1000 / 60);
+  }
+
+    return 0;
 }
