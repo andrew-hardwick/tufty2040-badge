@@ -8,11 +8,11 @@
 
 namespace badge {
     board_manager_t::board_manager_t() :
-        button_a(pimoroni::Tufty2040::A, pimoroni::Polarity::ACTIVE_LOW, 1500),
-        button_b(pimoroni::Tufty2040::B, pimoroni::Polarity::ACTIVE_LOW, 1500),
-        button_c(pimoroni::Tufty2040::C, pimoroni::Polarity::ACTIVE_LOW, 1500),
-        button_up(pimoroni::Tufty2040::UP, pimoroni::Polarity::ACTIVE_LOW, 1500),
-        button_down(pimoroni::Tufty2040::DOWN, pimoroni::Polarity::ACTIVE_LOW, 1500),
+        button_a(pimoroni::Tufty2040::A, pimoroni::Polarity::ACTIVE_HIGH, 1500),
+        button_b(pimoroni::Tufty2040::B, pimoroni::Polarity::ACTIVE_HIGH, 1500),
+        button_c(pimoroni::Tufty2040::C, pimoroni::Polarity::ACTIVE_HIGH, 1500),
+        button_up(pimoroni::Tufty2040::UP, pimoroni::Polarity::ACTIVE_HIGH, 1500),
+        button_down(pimoroni::Tufty2040::DOWN, pimoroni::Polarity::ACTIVE_HIGH, 1500),
         tufty(),
         pressed_button_queue()
     {
@@ -40,14 +40,26 @@ namespace badge {
         return !clean_state;
     }
 
-    pressed_button board_manager_t::tick() {
+    void board_manager_t::tick(pressed_button &button) {
         current_lux = adc_read();
 
         if ((current_lux > set_lux && current_lux - set_lux > 10) || (set_lux > current_lux && set_lux - current_lux > 10)) {
             clean_state = false;
         }
 
-        return pressed_button::NONE;
+        button = pressed_button::NONE;
+
+        //todo implement queue here maybe?
+        if (button_up.read()) {
+            button = pressed_button::UP;
+        }
+        if (button_down.read()) {
+            button = pressed_button::DOWN;
+        }
+        if (button_a.read()) {
+            button = pressed_button::A;
+        }
+ //       button = pressed_button::;
     }
 
     uint16_t board_manager_t::get_lux() {

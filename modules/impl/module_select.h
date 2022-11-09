@@ -9,8 +9,8 @@ namespace badge {
             module_select_t();
             ~module_select_t();
         
-            void print_screen(screen_printer_t printer) = 0;
-            void move_selection(int8_t direction) = 0;
+            int print_screen(screen_printer_t &printer) = 0;
+            void move_selection(int8_t &direction) = 0;
             void select(badge_module_t &result) = 0;
     }
 }

@@ -11,7 +11,6 @@
 
 #include "../utility/board_manager.h"
 #include "../modules/module_manager.h"
-#include "badge_fonts.h"
 
 namespace badge {
     display_manager_t::display_manager_t() :
@@ -32,13 +31,19 @@ namespace badge {
         screen_printer(&graphics)
     {
         screen_interface.set_backlight(255);
+        
+        screen_printer.create_pen("error_bg", 0, 0, 0);
+        screen_printer.create_pen("error_text", 255, 0, 0);
+        screen_printer.create_pen("debug_bg", 20, 0, 20);
+        screen_printer.create_pen("debug_text", 0, 255, 0);
+
     }
 
     display_manager_t::~display_manager_t() {
 
     }
 
-    void display_manager_t::update(board_manager_t &board_manager) {
+    void display_manager_t::update_board(board_manager_t &board_manager) {
         uint16_t brightness = board_manager.get_lux();
 
         if (brightness < 95) brightness = 95;
@@ -49,64 +54,28 @@ namespace badge {
         screen_interface.set_backlight((uint8_t) brightness);
     }
 
-    void display_manager_t::update(module_manager_t &module_manager) {
-        auto module = module_manager.getCurrentModule();
-
-        //draw the base screen
-        //possibly query the current module
-
-        //draw options or ui
-        //must query the current module
+    void display_manager_t::update_module(module_manager_t &module_manager) {
+        if (module_manager.print_screen(screen_printer) != 0) {
+            //draw error message
+            error();
+        }
 
         //update the screen
         screen_interface.update(&graphics);
     }
 
-    void display_manager_t::debug() { 
-        screen_printer.create_pen("white", 255, 255, 255);
-        screen_printer.create_pen("bg", 10, 10, 100);
-        screen_printer.create_pen("black", 0, 0, 0);
+    void display_manager_t::error() {
+        screen_printer.clear_screen("error_bg");
 
-        pimoroni::Point text_location(0, 32);
-
-    //Red Background
-        screen_printer.clear_screen("bg");
-
-    //White Rectangle
-        screen_printer.draw_rect("white", 0, 80, 320, 120);
-    
-    //HELLO
-        text_location.x = 85;
-        text_location.y = 25;
-        screen_printer.draw_text("white", "sans_bold", "HELLO", text_location, 1.5, 1);
-        
-    //My Name Is
-        text_location.y += 32;
-        screen_printer.draw_text("white", "sans", "My Name Is:", text_location, .75, 1);
-
-    //He/Him (bottom)
-        text_location.x = 110;
-        text_location.y = 220;
-        screen_printer.draw_text("white", "sans", "He/Him", text_location, .75, 1);
-
-    //Drew (name)
-        text_location.x = 25;
-        text_location.y = 140;
-        screen_printer.draw_text("black", "sans_bold", "Drew", text_location, 3.5, 8);
-
-        screen_interface.update(&graphics);
+        pimoroni::Point text_location(0, 120);
+        screen_printer.draw_text("error_text", "sans_bold", "ERROR", text_location, 3, 8);
     }
 
-    void display_manager_t::display_large_text(std::string text, pimoroni::Point text_location, uint16_t wrap) {
-        uint16_t length = text.length();
+    void display_manager_t::debug() { 
+        screen_printer.clear_screen("debug_bg");
 
-        //testing
-        length = 1;
-
-        for(uint16_t i = 0; i < length; i++) {
-            char test = text[i];
-            graphics.text(std::to_string(test), text_location, wrap);
-            text_location.y += 16;
-        }
+        pimoroni::Point text_location(0, 0);
+        screen_printer.draw_text("debug_text", "bitmap8", "DEBUG", text_location, 1, 1);
+        screen_interface.update(&graphics);
     }
 }

@@ -19,10 +19,10 @@ namespace badge {
             display_manager_t();
             ~display_manager_t();
 
-            void update(module_manager_t &module_manager);
-            void update(board_manager_t & board_manager);
+            void update_board(board_manager_t & board_manager);
+            void update_module(module_manager_t &module_manager);
 
-            void display_large_text(std::string text, pimoroni::Point text_location, uint16_t wrap);
+            void error();
 
             void debug();
             

@@ -10,26 +10,24 @@ using namespace badge;
 int main() {
   seed_random();
   board_manager_t board_manager;
-  module_manager_t module_manager;
   display_manager_t display_manager;
+  module_manager_t module_manager;
   //pico_dm::board_setup();
 
   //debug
-   display_manager.debug();
+ //  display_manager.debug();
 
+  pressed_button button = pressed_button::NONE;
   //loop forever
   while(true) {
-    module_manager.handle_button(board_manager.tick());
-    //board_manager.tick();
+    board_manager.tick(button);
+    module_manager.handle_button(button);
 
     if (board_manager.is_unclean()) {
-      display_manager.update(board_manager);
+      display_manager.update_board(board_manager);
     }
 
-    if (module_manager.is_unclean()) {
-      display_manager.update(module_manager);
-    }
-
+    display_manager.update_module(module_manager);
 
     sleep_ms(1000 / 60);
   }

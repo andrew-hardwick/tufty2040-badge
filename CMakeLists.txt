@@ -20,7 +20,8 @@ add_executable(${NAME}
     display/display_manager.cpp
     display/screen_printer.cpp
     modules/module_manager.cpp
-    modules/impl/module_select.cpp
+    modules/badge_module.cpp
+    modules/impl/hello_nametag.cpp
     utility/board_manager.cpp
     utility/rand_utils.cpp
 )

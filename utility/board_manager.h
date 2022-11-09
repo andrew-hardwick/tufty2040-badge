@@ -18,7 +18,7 @@ namespace badge {
             board_manager_t();
             ~board_manager_t();
 
-            pressed_button tick();
+            void tick(pressed_button &button);
             uint16_t get_lux();
             
             bool is_unclean();
